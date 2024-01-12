@@ -1,3 +1,5 @@
-ultralytics==8.0.0
-Flask-SQLAlchemy==3.1.1
+ultralytics==8.0.227
+SQLAlchemy==2.0.22
 Flask==3.0.0
+mysql-connector-python==8.2.0
+gunicorn
