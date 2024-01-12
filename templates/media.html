@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<base target="_blank">
+	<title>Camera Recording</title>	
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}" />
+
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyD0MHgSkptFEnwcCSMQ45w4agOmDEQSMsU"></script>
+</head>
+<body>
+<div>
+	<a id="home" href="{{ url_for('upload_form') }}" target="_self" class="btn">Go to Upload Video or Photo</a>
+
+	<h1>Record video or photo</h1>
+	
+	<p> Select one from the given options:
+		<select id="facingMode_dropdown">
+			<option value="user">Front</option>
+			<option value="environment">Back</option>                
+		</select>
+	</p>
+	
+	<div>
+		<video id="live" controls autoplay playsinline muted></video> 
+		<div id="controls">
+			<button id="rec" onclick="onBtnRecordClicked()">Record</button>
+			<button id="pauseRes"   onclick="onPauseResumeClicked()" disabled>Pause</button>
+			<button id="stop"  onclick="onBtnStopClicked()" disabled>Stop</button>
+			
+		</div>
+	</div>
+	
+	<a id="viewScanned" href="{{ url_for('viewvideo') }}" target="_self" class="btn" style="width: 250px; margin-top:10px" >View Scanned Video</a>
+
+	
+
+<p id="demo"></p>
+
+<script>
+
+
+
+
+</script>
+	
+	<script src="{{ url_for('static',filename='js/adapter-latest.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/main.js') }}"></script>
+</div>
+
+
+
+</body>
+</html>
