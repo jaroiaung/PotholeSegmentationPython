@@ -10,7 +10,7 @@ import uuid
 
 @app.route('/')
 def upload_form():
-    #scannedFiles = PotholeScanned.query.all()
+       
     return render_template('upload.html')
 
 @app.route('/camera')
@@ -27,17 +27,13 @@ def viewvideo():
 def process(): 
     files = request.files
     fullAddress = request.form['address']
-
     file = files.get('file')
     videofilename = str(uuid.uuid4()) +".webm"
-    
     with open(os.path.join(app.config['UPLOAD_FOLDER'], videofilename), 'wb') as f:
         video_stream = file.read()
         f.write(video_stream)
         
     videoPath = os.path.join(app.config['UPLOAD_FOLDER'], videofilename)
-
-    
     try:
         potholeFile = PotholeOrignal(filename=videofilename, filepath=videoPath, address = fullAddress)
         sessionDb.add(potholeFile)
@@ -53,9 +49,7 @@ def process():
     session['filename'] = videofilename
 
     model = YOLO("best.pt")
-    #model = YOLO(os.path.join('/home/jaroi1991/mysite/', 'best.pt'))
     results= model.predict(source=videoPath, save=True, conf=0.5)
-
     session['save_path'] = os.path.join(results[0].save_dir, videofilename)
 
     try:
@@ -68,7 +62,6 @@ def process():
         sessionDb.commit()
         scanned_id = potholeFileScanned.id
         sessionDb.close()
-
 
     response = jsonify(scanned_id)
     session['scannedpothole'] = scanned_id
@@ -88,7 +81,6 @@ def upload_video():
     else:
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
         pathName = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
         try:
@@ -104,13 +96,10 @@ def upload_video():
        
         session['id'] = original_id
         session['filename'] = filename
-       
         model = YOLO("best.pt")
-        #model = YOLO(os.path.join('/home/jaroi1991/mysite/', 'best.pt'))
         results= model.predict(source=pathName, save=True, conf=0.5)
         if filename.lower().endswith(('.mp4')):
             filename = filename.replace('.mp4', '.avi')
-
         session['save_path'] = os.path.join(results[0].save_dir, filename)
 
         try:
@@ -124,30 +113,8 @@ def upload_video():
             scanned_id = potholeFileScanned.id
             sessionDb.close()
 
-        
-        """ myfile = session['save_path']
-        myFolder = os.path.dirname(myfile)
-
-        if os.path.isfile(myfile):
-            os.remove(myfile)
-            os.rmdir(myFolder)			
-        else:
-            print("Error: %s file not found" % myfile)
-
-        myfile2 = os.path.join(app.config['UPLOAD_FOLDER'], session['filename'])
-        if os.path.isfile(myfile2):
-            os.remove(myfile2)
-        else:
-            print("Error: %s file not found" % myfile2) """
-
         flash('File is successfully uploaded.')
         return render_template('upload.html', id=scanned_id)
-
-@app.route('/display/<filename>')
-def display_video(filename):
-    #print('display_video filename: ' + filename)
-    return redirect(url_for('static', filename='uploads/' + filename), code=301)
-    #return redirect(url_for('/home/jaroi1991/mysite/static', filename='uploads/' + filename), code=301)
 
 # create download function for download files
 @app.route('/download/<upload_id>')
@@ -177,7 +144,6 @@ def download(upload_id):
         fileNameVideo = fileNameVideo.replace('.avi', '.mp4')
 
     return send_file(os.path.join(filePathVideo),download_name=fileNameVideo, as_attachment=True)
-    #return send_file(os.path.join('/home/jaroi1991/',filePathVideo),download_name=fileNameVideo, as_attachment=True)
 
 @app.route('/getaddress/<upload_id>')
 def getaddress(upload_id):

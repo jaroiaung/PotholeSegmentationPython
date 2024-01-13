@@ -8,7 +8,6 @@ from sqlalchemy.orm import relationship, sessionmaker
 
 
 UPLOAD_FOLDER = 'static/uploads/'
-#UPLOAD_FOLDER = '/home/jaroi1991/mysite/static/uploads/'
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)

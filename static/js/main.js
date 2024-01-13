@@ -5,9 +5,7 @@
 
 var selectElement = document.querySelector('#facingMode_dropdown');
 var facingMode = selectElement.value;
-
 var constraints = {audio:true,video:{facingMode: facingMode, width:{min:640,ideal:640,max:640 },height:{ min:480,ideal:480,max:480},framerate:60}};
-
 const x = document.getElementById("demo");
 var fullAddress = "";
 
@@ -16,13 +14,10 @@ var pauseResBtn = document.querySelector('button#pauseRes');
 var stopBtn = document.querySelector('button#stop');
 
 var liveVideoElement = document.querySelector('#live');
-//var playbackVideoElement = document.querySelector('#playback');
-//var dataElement = document.querySelector('#data');
 var downloadLink = document.querySelector('a#viewScanned');
 downloadLink.style.display = 'none';
 
 liveVideoElement.controls = false;
-//playbackVideoElement.controls=false;
 
 var mediaRecorder;
 var chunks = [];
@@ -72,9 +67,6 @@ if (!navigator.mediaDevices.getUserMedia){
 						log(e);
 						return;
 					}else{
-					   /*setInterval(function() {
-						  log(Math.round(soundMeter.instant.toFixed(2) * 100));
-					  }, 100);*/
 					}
 				  });
 				
@@ -146,12 +138,7 @@ function onBtnRecordClicked (){
 
 		mediaRecorder.onstop = function(){
 			log('mediaRecorder.onstop, mediaRecorder.state = ' + mediaRecorder.state);
-
-			//var recording = new Blob(chunks, {type: containerType});
 			var recording = new Blob(chunks, {type: mediaRecorder.mimeType});
-			
-
-			//downloadLink.href = URL.createObjectURL(recording);
 
 			var data = new FormData();
         data.append('file', recording , 'file');
@@ -169,27 +156,7 @@ function onBtnRecordClicked (){
         ).then(json => {
             console.log(json)
         });
-
-			/* 
-				srcObject code from https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject
-			*/
-
-			/*if ('srcObject' in playbackVideoElement) {
-			  try {
-			    playbackVideoElement.srcObject = recording;
-			  } catch (err) {
-			    if (err.name != "TypeError") {
-			      throw err;
-			    }*/
-			    // Even if they do, they may only support MediaStream
 			    playbackVideoElement.src = URL.createObjectURL(recording);
-			/*  }
-			} else {
-			  playbackVideoElement.src = URL.createObjectURL(recording);
-			} */
-
-			//playbackVideoElement.controls = true;
-			//playbackVideoElement.play();
 
 			var rand =  Math.floor((Math.random() * 10000000));
 			switch(containerType){
@@ -200,10 +167,6 @@ function onBtnRecordClicked (){
 					var name  = "video_"+rand+".webm" ;
 			}
 
-			//downloadLink.innerHTML = 'Download '+name;
-
-			//downloadLink.setAttribute( "download", name);
-			//downloadLink.setAttribute( "name", name);
 		};
 
 		mediaRecorder.onpause = function(){
@@ -231,20 +194,7 @@ function onBtnRecordClicked (){
 
 navigator.mediaDevices.ondevicechange = function(event) {
 	log("mediaDevices.ondevicechange");
-	/*
-	if (localStream != null){
-		localStream.getTracks().forEach(function(track) {
-			if(track.kind == "audio"){
-				track.onended = function(event){
-					log("audio track.onended");
-				}
-			}
-		});
-	}
-	*/
 }
-
-
 
 function onBtnStopClicked(){
 	mediaRecorder.stop();

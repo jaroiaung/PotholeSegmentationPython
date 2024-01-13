@@ -5,19 +5,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<base target="_blank">
 	<title>Camera Recording</title>	
-	<link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}" />
-
-	
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}" />	
 </head>
 <body>
-
 	<a id="camera" href="{{ url_for('showCamera') }}" target="_self" class="btn">Go to Record Video</a>
-
 <h2>Select file to upload and scan Pothholes.</h2>
-
-
-
-
 <form method="post" action="/" enctype="multipart/form-data">
     <dl>
 		<p>
@@ -28,7 +20,6 @@
 		<input type="submit" value="Upload" formtarget="_self">
 	</p>
 </form>
-
 <p>
 	{% with messages = get_flashed_messages() %}
 	  {% if messages %}
@@ -41,14 +32,9 @@
 	{% endwith %}	
 
 </p>
-
 {{location}}
-
-
 {% if id %}
 <a href="{{ url_for('download', upload_id=id) }}" target="_self">Download result</a>
 {% endif %}
-
-
 </body>
 </html>

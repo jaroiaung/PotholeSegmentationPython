@@ -5,41 +5,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<base target="_blank">
 	<title>Camera Recording</title>	
-	<link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}" />
-
-	
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}" />	
 </head>
 <body>
 	<a id="camera" href="{{ url_for('showCamera') }}" target="_self" class="btn">Back to Record Video</a>
 <h2>The scanned pothole video</h2>
-
-
 
 {% if address %}
 Address: {{ address }}
 <br/>
 {% endif %}
 
-
 {% if id %}
-
 <br/>
 <a href="{{ url_for('download', upload_id=id) }}" target="_self" class="btn">Download result</a>
 
 <video id="playback" src="{{ url_for('download', upload_id=id) }}" controls="true" autoplay play="true"></video> 
 {% endif %}
 
-
-
-
-
-
-
 <script src="{{ url_for('static',filename='js/adapter-latest.js') }}"></script>
 <script src="{{ url_for('static',filename='js/main.js') }}"></script>
-
-
-
 </body>
 </html>
 
