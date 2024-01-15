@@ -15,13 +15,13 @@ app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-engine = create_engine("mysql+mysqlconnector://root:mapunG26@localhost:3306/flaskDatabase", echo=True)
+engine = create_engine("mysql+mysqlconnector://root:e/jBj9WKf2242EbSobpznoh+M19Jf18rjxJm+ujIip8=@mysql-5-tzvb:3306/mysql", echo=True)
 
 Base = declarative_base()
 
 class PotholeOrignal(Base):
     __tablename__= 'pothole_orignal'
-    __table_args__ = {'schema': 'flaskDatabase'}
+    __table_args__ = {'schema': 'mysql'}
     id = Column(Integer, primary_key=True)
     filename = Column(Text)
     filepath = Column(Text)
@@ -32,12 +32,12 @@ class PotholeOrignal(Base):
 
 class PotholeScanned(Base):
     __tablename__= 'pothole_scanned'
-    __table_args__ = {'schema': 'flaskDatabase'}
+    __table_args__ = {'schema': 'mysql'}
     id = Column(Integer, primary_key=True)
     filename = Column(Text)
     filepath = Column(Text)
     address = Column(Text)
-    parent_id = Column(Integer, ForeignKey('flaskDatabase.pothole_orignal.id'))
+    parent_id = Column(Integer, ForeignKey('mysql.pothole_orignal.id'))
     pothole = relationship('PotholeOrignal')
 
     def __repr__(self):
