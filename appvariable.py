@@ -15,7 +15,7 @@ app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-engine = create_engine("mysql+mysqlconnector://root:e/jBj9WKf2242EbSobpznoh+M19Jf18rjxJm+ujIip8=@mysql-5-tzvb:3306/mysql", echo=True)
+engine = create_engine("mysql+mysqlconnector://root:e/jBj9WKf2242EbSobpznoh+M19Jf18rjxJm+ujIip8=@srv-cmgcjm021fec739pfv4g-5b6bdb88f5-t58jt:3306/mysql", echo=True)
 
 Base = declarative_base()
 
