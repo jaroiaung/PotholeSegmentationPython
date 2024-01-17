@@ -15,13 +15,20 @@ app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-engine = create_engine("mysql+mysqlconnector://root:e/jBj9WKf2242EbSobpznoh+M19Jf18rjxJm+ujIip8=@mysql-5-tzvb:3306/mysql", echo=True)
+
+app.config['DB_User'] = 'root'
+app.config['DB_Password'] = 'e/jBj9WKf2242EbSobpznoh+M19Jf18rjxJm+ujIip8='
+app.config['DB_HOST'] = 'mysql-5-tzvb'
+app.config['DB_Port'] = '3306'
+app.config['DB_Database'] = 'mysql'
+
+engine = create_engine("mysql+mysqlconnector://{0}:{1}@{2}:{3}/{4}".format(app.config['DB_User'], app.config['DB_Password'], app.config['DB_HOST'], app.config['DB_Port'],app.config['DB_Database']), echo=True)
 
 Base = declarative_base()
 
 class PotholeOrignal(Base):
     __tablename__= 'pothole_orignal'
-    __table_args__ = {'schema': 'mysql'}
+    __table_args__ = {'schema': app.config['DB_Database']}
     id = Column(Integer, primary_key=True)
     filename = Column(Text)
     filepath = Column(Text)
@@ -32,12 +39,12 @@ class PotholeOrignal(Base):
 
 class PotholeScanned(Base):
     __tablename__= 'pothole_scanned'
-    __table_args__ = {'schema': 'mysql'}
+    __table_args__ = {'schema': app.config['DB_Database']}
     id = Column(Integer, primary_key=True)
     filename = Column(Text)
     filepath = Column(Text)
     address = Column(Text)
-    parent_id = Column(Integer, ForeignKey('mysql.pothole_orignal.id'))
+    parent_id = Column(Integer, ForeignKey(app.config['DB_Database']+'.pothole_orignal.id'))
     pothole = relationship('PotholeOrignal')
 
     def __repr__(self):
