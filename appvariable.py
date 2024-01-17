@@ -18,7 +18,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 app.config['DB_User'] = 'root'
 app.config['DB_Password'] = 'e/jBj9WKf2242EbSobpznoh+M19Jf18rjxJm+ujIip8='
-app.config['DB_HOST'] = 'mysql-5-tzvb'
+app.config['DB_HOST'] = 'srv-cmgcjm021fec739pfv4g-5b6bdb88f5-t58jt'
 app.config['DB_Port'] = '3306'
 app.config['DB_Database'] = 'mysql'
 
