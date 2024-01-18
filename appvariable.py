@@ -12,13 +12,15 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.secret_key = "secret key"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['HOME_DIR'] =''
+app.config['HOME_FILE_DIR'] = ''
+app.config['UPLOAD_FOLDER'] = app.config['HOME_DIR']+ UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 
 app.config['DB_User'] = 'root'
-app.config['DB_Password'] = 'LLvOo3SDux8bL0SydAe61Ud2/iwa7EU1aQVK0/YYkbU='
-app.config['DB_HOST'] = 'mysql-45ok'
+app.config['DB_Password'] = 'mapunG26'
+app.config['DB_HOST'] = 'flaskdb4'
 app.config['DB_Port'] = '3306'
 app.config['DB_Database'] = 'flaskDatabase'
 

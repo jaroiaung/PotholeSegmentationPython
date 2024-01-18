@@ -3,9 +3,7 @@
 /* globals MediaRecorder */
 // Spec is at http://dvcs.w3.org/hg/dap/raw-file/tip/media-stream-capture/RecordingProposal.html
 
-var selectElement = document.querySelector('#facingMode_dropdown');
-var facingMode = selectElement.value;
-var constraints = {audio:true,video:{facingMode: facingMode, width:{min:640,ideal:640,max:640 },height:{ min:480,ideal:480,max:480},framerate:60}};
+
 const x = document.getElementById("demo");
 var fullAddress = "";
 
@@ -27,53 +25,63 @@ var soundMeter  = null;
 var containerType = "video/webm"; //defaults to webm but we switch to mp4 on Safari 14.0.2+
 
 getLocation();
+initializeMedia();
 
-if (!navigator.mediaDevices.getUserMedia){
-	alert('navigator.mediaDevices.getUserMedia not supported on your browser, use the latest version of Firefox or Chrome');
-}else{
-	if (window.MediaRecorder == undefined) {
-			alert('MediaRecorder not supported on your browser, use the latest version of Firefox or Chrome');
+
+function initializeMedia(){
+
+	var selectElement = document.querySelector('#facingMode_dropdown');
+var facingMode = selectElement.value;
+var constraints = {audio:true,video:{facingMode: facingMode, width:{min:640,ideal:640,max:640 },height:{ min:480,ideal:480,max:480},framerate:60}};
+
+
+	if (!navigator.mediaDevices.getUserMedia){
+		alert('navigator.mediaDevices.getUserMedia not supported on your browser, use the latest version of Firefox or Chrome');
 	}else{
-		navigator.mediaDevices.getUserMedia(constraints)
-			.then(function(stream) {
-				localStream = stream;
-				
-				localStream.getTracks().forEach(function(track) {
-					if(track.kind == "audio"){
-						track.onended = function(event){
-							 log("audio track.onended Audio track.readyState="+track.readyState+", track.muted=" + track.muted);
+		if (window.MediaRecorder == undefined) {
+				alert('MediaRecorder not supported on your browser, use the latest version of Firefox or Chrome');
+		}else{
+			navigator.mediaDevices.getUserMedia(constraints)
+				.then(function(stream) {
+					localStream = stream;
+					
+					localStream.getTracks().forEach(function(track) {
+						if(track.kind == "audio"){
+							track.onended = function(event){
+								 log("audio track.onended Audio track.readyState="+track.readyState+", track.muted=" + track.muted);
+							}
 						}
-					}
-					if(track.kind == "video"){
-						track.onended = function(event){
-							log("video track.onended Audio track.readyState="+track.readyState+", track.muted=" + track.muted);
+						if(track.kind == "video"){
+							track.onended = function(event){
+								log("video track.onended Audio track.readyState="+track.readyState+", track.muted=" + track.muted);
+							}
 						}
-					}
+					});
+					
+					liveVideoElement.srcObject = localStream;
+					liveVideoElement.play();
+					
+					try {
+						window.AudioContext = window.AudioContext || window.webkitAudioContext;
+						window.audioContext = new AudioContext();
+					  } catch (e) {
+						log('Web Audio API not supported.');
+					  }
+	
+					  soundMeter = window.soundMeter = new SoundMeter(window.audioContext);
+					  soundMeter.connectToSource(localStream, function(e) {
+						if (e) {
+							log(e);
+							return;
+						}else{
+						}
+					  });
+					
+				}).catch(function(err) {
+					/* handle the error */
+					log('navigator.getUserMedia error: '+err);
 				});
-				
-				liveVideoElement.srcObject = localStream;
-				liveVideoElement.play();
-				
-				try {
-					window.AudioContext = window.AudioContext || window.webkitAudioContext;
-					window.audioContext = new AudioContext();
-				  } catch (e) {
-					log('Web Audio API not supported.');
-				  }
-
-				  soundMeter = window.soundMeter = new SoundMeter(window.audioContext);
-				  soundMeter.connectToSource(localStream, function(e) {
-					if (e) {
-						log(e);
-						return;
-					}else{
-					}
-				  });
-				
-			}).catch(function(err) {
-				/* handle the error */
-				log('navigator.getUserMedia error: '+err);
-			});
+		}
 	}
 }
 

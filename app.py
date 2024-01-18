@@ -48,7 +48,7 @@ def process():
     session['id'] = original_id
     session['filename'] = videofilename
 
-    model = YOLO("best.pt")
+    model = YOLO(os.path.join(app.config['HOME_DIR'], 'best.pt'))
     results= model.predict(source=videoPath, save=True, conf=0.5)
     session['save_path'] = os.path.join(results[0].save_dir, videofilename)
 
@@ -96,7 +96,7 @@ def upload_video():
        
         session['id'] = original_id
         session['filename'] = filename
-        model = YOLO("best.pt")
+        model = YOLO(os.path.join(app.config['HOME_DIR'], 'best.pt'))
         results= model.predict(source=pathName, save=True, conf=0.5)
         if filename.lower().endswith(('.mp4')):
             filename = filename.replace('.mp4', '.avi')
@@ -143,7 +143,7 @@ def download(upload_id):
     if fileNameVideo.lower().endswith(('.avi')):
         fileNameVideo = fileNameVideo.replace('.avi', '.mp4')
 
-    return send_file(os.path.join(filePathVideo),download_name=fileNameVideo, as_attachment=True)
+    return send_file(os.path.join(app.config['HOME_FILE_DIR'],filePathVideo),download_name=fileNameVideo, as_attachment=True)
 
 @app.route('/getaddress/<upload_id>')
 def getaddress(upload_id):
