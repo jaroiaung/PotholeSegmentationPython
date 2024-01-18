@@ -17,10 +17,10 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 
 app.config['DB_User'] = 'root'
-app.config['DB_Password'] = 'e/jBj9WKf2242EbSobpznoh+M19Jf18rjxJm+ujIip8='
-app.config['DB_HOST'] = 'srv-cmgcjm021fec739pfv4g-5b6bdb88f5-t58jt'
+app.config['DB_Password'] = 'LLvOo3SDux8bL0SydAe61Ud2/iwa7EU1aQVK0/YYkbU='
+app.config['DB_HOST'] = 'mysql-45ok'
 app.config['DB_Port'] = '3306'
-app.config['DB_Database'] = 'mysql'
+app.config['DB_Database'] = 'flaskDatabase'
 
 engine = create_engine("mysql+mysqlconnector://{0}:{1}@{2}:{3}/{4}".format(app.config['DB_User'], app.config['DB_Password'], app.config['DB_HOST'], app.config['DB_Port'],app.config['DB_Database']), echo=True)
 
