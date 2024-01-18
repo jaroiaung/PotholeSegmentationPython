@@ -18,7 +18,7 @@ app.config['UPLOAD_FOLDER'] = app.config['HOME_DIR']+ UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 
-app.config['DB_User'] = 'root'
+app.config['DB_User'] = 'mysql'
 app.config['DB_Password'] = 'mapunG26'
 app.config['DB_HOST'] = 'flaskdb4'
 app.config['DB_Port'] = '3306'
