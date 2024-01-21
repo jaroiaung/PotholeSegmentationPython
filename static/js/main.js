@@ -153,7 +153,7 @@ function onBtnRecordClicked (){
 		data.append('address', fullAddress);
 
 
-        fetch('https://potholesegmentation.onrender.com/process', {
+        fetch('/process', {
             method: 'POST',
             body: data
   

@@ -1,4 +1,0 @@
-ultralytics==8.0.227
-SQLAlchemy==2.0.22
-Flask==3.0.0
-mysql-connector-python==8.2.0

@@ -3,9 +3,9 @@ from io import BytesIO
 from flask import Flask, render_template, request, send_file
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey,Text
+from sqlalchemy import Column, Integer, String, ForeignKey,Text,DateTime
 from sqlalchemy.orm import relationship, sessionmaker
-
+from datetime import datetime
 
 UPLOAD_FOLDER = 'static/uploads/'
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -18,9 +18,9 @@ app.config['UPLOAD_FOLDER'] = app.config['HOME_DIR']+ UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 
-app.config['DB_User'] = 'mysql'
+app.config['DB_User'] = 'root'
 app.config['DB_Password'] = 'mapunG26'
-app.config['DB_HOST'] = 'flaskdb4'
+app.config['DB_HOST'] = 'localhost'
 app.config['DB_Port'] = '3306'
 app.config['DB_Database'] = 'flaskDatabase'
 
@@ -35,6 +35,7 @@ class PotholeOrignal(Base):
     filename = Column(Text)
     filepath = Column(Text)
     address = Column(Text)
+    created_date = Column(DateTime, default=datetime.now())
 
     def __repr__(self):
         return f"<id: {self.id}, filename: {self.filename}, filepath: {self.filepath}, address: {self.address} >"
@@ -46,6 +47,7 @@ class PotholeScanned(Base):
     filename = Column(Text)
     filepath = Column(Text)
     address = Column(Text)
+    created_date = Column(DateTime, default=datetime.now())
     parent_id = Column(Integer, ForeignKey(app.config['DB_Database']+'.pothole_orignal.id'))
     pothole = relationship('PotholeOrignal')
 

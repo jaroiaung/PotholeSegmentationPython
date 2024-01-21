@@ -11,7 +11,9 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static',filename='css/product.css') }}" />
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyD0MHgSkptFEnwcCSMQ45w4agOmDEQSMsU"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/app.css') }}" />
+
   </head>
 
   <body>
@@ -30,10 +32,10 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('upload_form') }}">Upload Files <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('showCamera') }}">Record Video</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('showresults') }}">Show all scanned results</a>
           </li>
          
@@ -42,49 +44,28 @@
        
       </div>
     </nav>
+    
+    <div class="card border-0 shadow mb-4">
+      <div class="card-body">
+        <h3>All scanned results</h3>
 
-    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 bg-light">
-        
-        <div>
-            
-            <h1>Record video</h1>
+            {{ table | safe }}
 
-            <div style="margin-bottom: 15px;">Please click record button to record and scan pothole results using yolov8.</div>
-            
-            <p> Select front or back camera :
-                <select id="facingMode_dropdown" onchange="initializeMedia()">
-                    <option value="user">Front</option>
-                    <option value="environment">Back</option>                
-                </select>
-            </p>
-            <div>
-                <video id="live" style="width: 100%;" controls autoplay playsinline muted></video> 
-                <div id="controls" style="margin-top: 15px; margin-bottom: 15px;">
-                    <button id="rec" class="btn btn-secondary" onclick="onBtnRecordClicked()">Record</button>
-                    <button id="pauseRes" class="btn btn-secondary"   onclick="onPauseResumeClicked()" disabled>Pause</button>
-                    <button id="stop" class="btn btn-secondary" onclick="onBtnStopClicked()" disabled>Stop</button>
-                    
-                </div>
-            </div>
-            <a id="viewScanned" href="{{ url_for('viewvideo') }}" target="_self" class="btn" style="margin-top:10px" >View Scanned Video</a>
-        <p id="demo"></p>
-        <script>
-        </script>
-            
-            <script src="{{ url_for('static',filename='js/adapter-latest.js') }}"></script>
-            <script src="{{ url_for('static',filename='js/main.js') }}"></script>
-        </div>
-        
+      </div> 
+  </div>
 
-      
-    </div>
 
   
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     
     
     <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/simple-datatables.js') }}"></script>
   
-   
+    <script>
+      const table = new simpleDatatables.DataTable("table")
+</script>
+
   </body>
 </html>

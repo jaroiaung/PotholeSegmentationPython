@@ -6,7 +6,42 @@ from werkzeug.utils import secure_filename
 from io import BytesIO
 from ultralytics import YOLO
 import uuid
+from datetime import datetime
+import pandas as pd
 
+@app.route('/showresults/')
+def showresults():
+
+    table  = ''
+    table += '<table class="table hoverTable">'
+    table += '    <thead>'
+    table += '        <tr>'
+    table += '            <th>View</th>'
+    table += '            <th>ID</th>'
+    table += '            <th>File Name</th>'
+    table += '            <th>File Path</th>'
+    table += '            <th>Address</th>'
+    table += '            <th>Created Date</th>'
+    table += '        </tr>'
+    table += '    </thead>'
+    table += '    <tbody>'
+    
+    for item in sessionDb.query(PotholeScanned).all():
+        ts = item.created_date.strftime("%m/%d/%Y, %H:%M:%S")
+
+        table += '<tr data-id="' + str( item.id   ) + '" >'
+        table += '<td><a href="/viewfiles/'+ str( item.id   )+'" >View</a></td>'
+        table += '<td data-name="id">' + str( item.id   )  + '</td>'
+        table += '<td data-name="filename">' + item.filename + '</td>'
+        table += '<td data-name="filepath">' + item.filepath + '</td>'
+        table += '<td data-name="address">' + item.address + '</td>'
+        table += '<td data-name="created_date">' + ts + '</td>'
+        table += '</tr>'
+
+    table += '    </tbody>'
+    table += '</table>' 
+    
+    return render_template( 'showresults.html', segment='datatables', table=table )
 
 @app.route('/')
 def upload_form():
@@ -23,6 +58,29 @@ def viewvideo():
 
     return render_template('view_video.html', id = session['scannedpothole'],address= fullAddressToPass)
 
+@app.route('/viewfiles/<upload_id>')
+def viewfiles(upload_id):
+
+    try:
+        potholeScannedFile = sessionDb.query(PotholeScanned).filter_by(id=upload_id).first()
+        id = potholeScannedFile.id
+        filename= potholeScannedFile.filename
+        address = potholeScannedFile.address
+        filetype = ''
+        if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+            filetype = 'image'
+        else:
+            filetype = 'video'
+        
+    except:      
+        sessionDb.rollback()
+        sessionDb.close()
+        raise
+    else:
+        sessionDb.close()
+   
+    return render_template('view_file.html', id = id, filename=filename, address = address, filetype = filetype)
+
 @app.route('/process', methods=['POST']) 
 def process(): 
     files = request.files
@@ -35,10 +93,11 @@ def process():
         
     videoPath = os.path.join(app.config['UPLOAD_FOLDER'], videofilename)
     try:
-        potholeFile = PotholeOrignal(filename=videofilename, filepath=videoPath, address = fullAddress)
+        potholeFile = PotholeOrignal(filename=videofilename, filepath=videoPath, address = fullAddress, created_date = datetime.now())
         sessionDb.add(potholeFile)
     except:
         sessionDb.rollback()
+        sessionDb.close()
         raise
     else:
         sessionDb.commit()
@@ -53,10 +112,11 @@ def process():
     session['save_path'] = os.path.join(results[0].save_dir, videofilename)
 
     try:
-        potholeFileScanned = PotholeScanned(filename= videofilename, filepath= session['save_path'],parent_id = session['id'], address = fullAddress)
+        potholeFileScanned = PotholeScanned(filename= videofilename, filepath= session['save_path'],parent_id = session['id'], address = fullAddress, created_date = datetime.now())
         sessionDb.add(potholeFileScanned)
     except:      
         sessionDb.rollback()
+        sessionDb.close()
         raise
     else:
         sessionDb.commit()
@@ -84,10 +144,11 @@ def upload_video():
         pathName = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
         try:
-            potholeFile = PotholeOrignal(filename=file.filename, filepath=pathName, address = "")
+            potholeFile = PotholeOrignal(filename=file.filename, filepath=pathName, address = "", created_date = datetime.now())
             sessionDb.add(potholeFile)
         except:      
             sessionDb.rollback()
+            sessionDb.close()
             raise
         else:
             sessionDb.commit()
@@ -103,10 +164,11 @@ def upload_video():
         session['save_path'] = os.path.join(results[0].save_dir, filename)
 
         try:
-            potholeFileScanned = PotholeScanned(filename= filename, filepath= session['save_path'],parent_id = session['id'], address = "")
+            potholeFileScanned = PotholeScanned(filename= filename, filepath= session['save_path'],parent_id = session['id'], address = "", created_date = datetime.now())
             sessionDb.add(potholeFileScanned)
         except:      
             sessionDb.rollback()
+            sessionDb.close()
             raise
         else:
             sessionDb.commit()
@@ -124,6 +186,7 @@ def download(upload_id):
         potholeScannedFile = sessionDb.query(PotholeScanned).filter_by(id=upload_id).first()
     except:      
         sessionDb.rollback()
+        sessionDb.close()
         raise
     else:
         sessionDb.close()
@@ -151,6 +214,7 @@ def getaddress(upload_id):
         potholeScannedFile = sessionDb.query(PotholeScanned).filter_by(id=upload_id).first()
     except:      
         sessionDb.rollback()
+        sessionDb.close()
         raise
     else:
         address = potholeScannedFile.address
@@ -160,4 +224,4 @@ def getaddress(upload_id):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5000)
